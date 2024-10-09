@@ -1,0 +1,315 @@
+/* C program to print Hello World! */
+ 
+#include <stdio.h>
+int main()
+{
+    printf("Hello World!");
+ 
+    return 0;
+}
+
+/* exercício 1 h*/
+
+#include <stdio.h>
+#include <conio.h>
+#include <stdlib.h>
+int main(void)
+{
+  int i;
+  
+  printf("Gerando 10 valores aleatorios:\n\n");
+  
+    /* gerando valores aleatórios entre zero e 100 */
+    printf("%d \n", rand() % 100);
+    
+    printf("%d \n", rand() % 100);
+    
+    printf("%d \n", rand() % 100);
+    
+    printf("%d \n", rand() % 100);
+    
+    printf("%d \n", rand() % 100);
+    
+    printf("%d \n", rand() % 100);
+    
+    printf("%d \n", rand() % 100);
+    
+    printf("%d \n", rand() % 100);
+    
+    printf("%d \n", rand() % 100);
+    
+    printf("%d \n", rand() % 100);
+    
+  return 0;
+}
+
+/* exercício 1 j*/
+
+#include <stdio.h>
+
+int main(void)
+{
+  float a=0,b=0;
+  
+  printf("Digite dois lados de um retângulo:\n\n");
+  
+  scanf("%f",&a);
+  
+  scanf("%f",&b);
+  
+  a = a*b;
+  
+/* gerando valores aleatórios entre zero e 100 */
+  printf("A área do retângulo é igual a %f",a);
+    
+  return 0;
+}
+
+/* exercício 1 k*/
+#include <stdio.h>
+#include <math.h>
+
+int main(void)
+{
+  float a=0,b=0;
+  
+  printf("Digite um número real para ver os possíveis arrendondamentos:\n\n");
+  
+  scanf("%f",&a);
+  
+  scanf("%f",&b);
+ 
+ /* Utilizando a função floor */
+  a=floor(a);
+  printf("Utilizando a função floor: %f \n",a);
+
+/* Utilizando a função ceil */
+  b=ceil(b);
+  printf("Utilizando a função ceil: %f \n",b);
+    
+  return 0;
+}
+
+/* exercício 1 l*/
+
+#include <stdio.h>
+#include <math.h>
+#define PI 3.1416
+
+int main(void)
+{
+  float r=0,area=0, per=0;
+  
+  printf("Digite o raio do círculo:\n\n");
+  
+  scanf("%f",&r);
+  
+
+ 
+ /* cálculo da área de um circulo */
+  area=PI*pow(r,2);
+  printf("Área do círculo: %f \n",area);
+
+/* Cálculo do perímetro */
+  per=2*PI*r;
+  printf("Perímetro do círculo: %f \n",per);
+    
+  return 0;
+}
+
+#include <stdio.h>
+#include <math.h>
+
+/* exercício 1 m*/
+int main(void)
+{
+  float a=0,b=0,c;
+  
+  printf("Digite um número para saber seu seno e cosseno:\n\n");
+  
+  scanf("%f",&a);
+  
+
+ 
+ /* cálculo do seno do número */
+  b=sin(a);
+  printf("Seno do número: %f \n",b);
+
+/* Cálculo do cosseno do número */
+  c=cos(a);
+  printf("Cosseno do número: %f \n",c);
+    
+  return 0;
+}
+
+
+/* exercício 1 n*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+
+int main(void)
+{
+  float a=0,b=0,c;
+  
+  printf("Digite um número para saber seu valor absoluto e sua raiz quadrada:\n\n");
+  
+  scanf("%f",&a);
+  
+
+ 
+ /* cálculo do valor absoluto */
+  b=abs(a);
+  printf("valor absoluto: %f \n",b);
+
+/* Cálculo da raiz quadrada  */
+  c=sqrt(a);
+  printf("raiz quadrada: %f \n",c);
+    
+  return 0;
+}
+
+/* exercício 2 a*/
+
+#include <stdio.h>
+
+
+
+int main(void)
+{
+  int a=0,b=0,c=0;
+  
+  printf("Digite três números inteiros para saber qual o maior:\n\n");
+  
+  scanf("%d",&a);
+  scanf("%d",&b);
+  scanf("%d",&c);
+  
+
+ 
+ /* descobrindo se o a é o maior */
+  if(a>b && a>c)
+  {
+   
+        printf("O número %d é o maior!\n",a); 
+  }
+  else
+  {
+       /* se o a não é o maior, então testamos b */
+      if(b>c && b>a)
+      {
+          printf("O número %d é o maior!\n",b); 
+      }
+      /* se nem a nem b, sobrou c */
+      else
+      {
+          printf("O número %d é o maior!\n",c); 
+      }
+   
+  }
+  
+    
+  return 0;
+}
+
+/* exercício 2 b*/
+
+#include <stdio.h>
+
+
+
+int main(void)
+{
+  int a=0;
+  float dt=0, F=0,C=0;
+  
+  printf("Digite 1 para converter a temperatura de Celsius para Fahrenheit ou 2 para conversão inversa:\n\n");
+  
+  scanf("%d",&a);
+  
+  printf("Digite o valor da temperatura que deseja converter:\n\n");
+
+  scanf("%f",&dt);
+ 
+ /* equação celsius - Fahrenheit: F=1,8*C+32 */
+  if(a==1)
+  {
+ 
+    F=1.8*dt+32;   
+    printf("A temperatura em Fahrenheit é igual a: %f F\n",F); 
+  }
+  else
+  {
+       
+    /* equação Fahrenheit - celsius : C=5/9*(F-32) */
+    C=(dt-32)/1.8;
+    // C=(5/9)*(dt-32); não entendi porque não funcionou
+ 
+    printf("A temperatura em celsius é igual a: %f ºC\n",C); 
+     
+  }
+  
+    
+  return 0;
+}
+
+/* exercício 2 c*/
+
+#include <stdio.h>
+
+int main(void)
+{
+  int a=0, b=0, c=0;
+
+  printf("Digite um número para descobrir os números pares que antecedem ele:\n\n");
+  scanf("%d",&a);
+ /*
+ do
+ {
+   // o operador mod, representado por %, vai retornar zero quando o número for par
+    if(b%2 == 0)
+    {
+        printf("%d\n",b);
+    }
+    b++;
+ }while(b<a);
+*/
+
+ // ou então apenas o while
+ 
+ while(b<a)
+ {
+    if(b%2 == 0)
+    {
+        printf("%d\n",b);
+    }
+    b++; 
+     
+ }
+ 
+  return 0;
+}
+
+/* exercício 2 d*/
+
+#include <stdio.h>
+
+int main(void)
+{
+  int a=0, b=0, c=0;
+
+  printf("Digite um número para descobrir a soma de todos os números naturais, S=1+2+3+4+...:\n\n");
+  scanf("%d",&a);
+   
+   // este laço vai gerar os números naturais, até o número escolhido pelo usuário
+  for(b=0;b<=a;b++)
+  {
+    c=c+b;
+      
+  }
+  printf("A soma de todos os números naturais, até %d é igual a %d\n",a,c);
+
+  return 0;
+}
