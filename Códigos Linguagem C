@@ -313,3 +313,36 @@ int main(void)
 
   return 0;
 }
+
+/* exercício 2 g*/
+
+#include <stdio.h>
+
+int main()
+{
+   char conceito=0;
+   
+   printf("Digite o conceito obtido na pós graduação:");
+   scanf("%c",&conceito);
+   
+   switch(conceito)
+   { 
+    case 'a': 
+        printf("Excelente");
+        break; 
+    case 'b': 
+          printf("Muito bom");
+        break; 
+    case 'c': 
+        printf("Bom");
+        break; 
+    case 'y': 
+          printf("Ruim");
+        break; 
+    case 'f': 
+          printf("Muito ruim");
+        break; 
+    }
+
+    return 0;
+}
