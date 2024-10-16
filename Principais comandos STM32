@@ -1,0 +1,246 @@
+////////////////////////
+//     GPIO           //
+////////////////////////
+
+HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,1);// aplica nível lógico 1 em um pino do GPIO configurado como saída
+HAL_Delay(25);
+HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,0);// aplica nível lógico 0 em um pino do GPIO configurado como saída
+
+!HAL_GPIO_ReadPin(GPIOA,GPIO_PIN_8); // leitura de um pino do GPIO configurado como entrada
+
+////////////////////////
+//     INTERRUPÇÃO    //
+////////////////////////
+
+// EXTI Line9 External Interrupt ISR Handler CallBackFun
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+    if(GPIO_Pin == GPIO_PIN_9) // If The INT Source Is EXTI Line9 (A9 Pin)
+    {
+    HAL_GPIO_TogglePin(GPIOA, 1<<i); // Toggle The Output (LED) Pin
+
+    k++;
+    i++;
+    if(i>4)
+    i=0;
+
+
+    }
+}
+
+////////////////////////
+//     temporizador   //
+////////////////////////
+
+   /* tem que disparar o contador, se não ele permanece em idle */
+  HAL_TIM_Base_Start_IT(&htim3);
+
+/* rotina de interrupção do contador */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
+{
+    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+	
+	/* teste para saber se entrou aqui.. */
+     i++;
+    if(i==100000)
+    i=0;
+}
+
+/* divisor de frequência, é necessário ajustar o incremento das variáveis i j k para obter a divisão adequada */
+
+    j++;
+    k++;
+    w++;
+
+    HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+    
+    if(j==4)
+      {
+        j=0;
+        HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_1);
+      }
+    if(k==8)
+      {
+        k=0;
+        HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_2);
+      }
+    if(w==16)
+      {
+        w=0;
+        HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_3);
+      }
+
+////////////////////////
+//     módulo PWM     //
+////////////////////////
+
+/**
+  * @brief  Starts the PWM signal generation.
+  * @param  htim TIM handle
+  * @param  Channel TIM Channels to be enabled
+  *          This parameter can be one of the following values:
+  *            @arg TIM_CHANNEL_1: TIM Channel 1 selected
+  *            @arg TIM_CHANNEL_2: TIM Channel 2 selected
+  *            @arg TIM_CHANNEL_3: TIM Channel 3 selected
+  *            @arg TIM_CHANNEL_4: TIM Channel 4 selected
+  * @retval HAL status
+  */
+HAL_StatusTypeDef HAL_TIM_PWM_Start(TIM_HandleTypeDef *htim, uint32_t Channel)
+
+
+
+HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1);
+htim4.Instance->CCR1 = htim4.Instance->(ARR*i)/100;
+
+ htim4.Init.Period = 5750; // configura o período do pwm
+ sConfigOC.Pulse = 1750; // configura o duty cycle
+ 
+ /*** o código a seguir altera a razão cíclica progressivamente, j=1000 significa que ela altera a cada 1 segundo ****/
+ 
+     for(i=0;i<100;i++)
+    {
+      htim4.Instance->CCR2 = (htim4.Instance->ARR*i)/100;
+      HAL_Delay(j);
+    }
+	
+	// colocar no osciloscópio e medir o duty cycle, observar que ele muda 1% a cada 1 segundo, igual ao for que está dentro do mcu!!!
+
+////////////////////////
+//     módulo ADC     //
+////////////////////////
+
+/**
+  * @brief  Initializes the ADC peripheral and regular group according to  
+  *         parameters specified in structure "ADC_InitTypeDef".
+  * @note   As prerequisite, ADC clock must be configured at RCC top level
+  *         (clock source APB2).
+  *         See commented example code below that can be copied and uncommented 
+  *         into HAL_ADC_MspInit().
+  * @note   Possibility to update parameters on the fly:
+  *         This function initializes the ADC MSP (HAL_ADC_MspInit()) only when
+  *         coming from ADC state reset. Following calls to this function can
+  *         be used to reconfigure some parameters of ADC_InitTypeDef  
+  *         structure on the fly, without modifying MSP configuration. If ADC  
+  *         MSP has to be modified again, HAL_ADC_DeInit() must be called
+  *         before HAL_ADC_Init().
+  *         The setting of these parameters is conditioned to ADC state.
+  *         For parameters constraints, see comments of structure 
+  *         "ADC_InitTypeDef".
+  * @note   This function configures the ADC within 2 scopes: scope of entire 
+  *         ADC and scope of regular group. For parameters details, see comments 
+  *         of structure "ADC_InitTypeDef".
+  * @param  hadc: ADC handle
+  * @retval HAL status
+  */
+HAL_StatusTypeDef HAL_ADC_Init(ADC_HandleTypeDef* hadc)
+
+MX_ADC1_Init();
+
+/**
+  * @brief  Enables ADC, starts conversion of regular group.
+  *         Interruptions enabled in this function: None.
+  * @param  hadc: ADC handle
+  * @retval HAL status
+  */
+HAL_StatusTypeDef HAL_ADC_Start(ADC_HandleTypeDef* hadc)
+
+HAL_ADC_Start(&hadc1);
+
+
+/**
+  * @brief  Wait for regular group conversion to be completed.
+  * @note   This function cannot be used in a particular setup: ADC configured 
+  *         in DMA mode.
+  *         In this case, DMA resets the flag EOC and polling cannot be
+  *         performed on each conversion.
+  * @note   On STM32F1 devices, limitation in case of sequencer enabled
+  *         (several ranks selected): polling cannot be done on each 
+  *         conversion inside the sequence. In this case, polling is replaced by
+  *         wait for maximum conversion time.
+  * @param  hadc: ADC handle
+  * @param  Timeout: Timeout value in millisecond.
+  * @retval HAL status
+  */
+HAL_StatusTypeDef HAL_ADC_PollForConversion(ADC_HandleTypeDef* hadc, uint32_t Timeout)
+
+HAL_ADC_PollForConversion(&hadc1,100);
+
+/**
+  * @brief  Get ADC regular group conversion result.
+  * @note   Reading register DR automatically clears ADC flag EOC
+  *         (ADC group regular end of unitary conversion).
+  * @note   This function does not clear ADC flag EOS 
+  *         (ADC group regular end of sequence conversion).
+  *         Occurrence of flag EOS rising:
+  *          - If sequencer is composed of 1 rank, flag EOS is equivalent
+  *            to flag EOC.
+  *          - If sequencer is composed of several ranks, during the scan
+  *            sequence flag EOC only is raised, at the end of the scan sequence
+  *            both flags EOC and EOS are raised.
+  *         To clear this flag, either use function: 
+  *         in programming model IT: @ref HAL_ADC_IRQHandler(), in programming
+  *         model polling: @ref HAL_ADC_PollForConversion() 
+  *         or @ref __HAL_ADC_CLEAR_FLAG(&hadc, ADC_FLAG_EOS).
+  * @param  hadc: ADC handle
+  * @retval ADC group regular conversion data
+  */
+uint32_t HAL_ADC_GetValue(ADC_HandleTypeDef* hadc)
+
+read = HAL_ADC_GetValue(&hadc1);
+
+/****** o código a seguir converte a leitura do adc para tensão, utilizando uma variável float ******/
+   read_f = (float)(read*3.3)/4095;
+   
+   // comparar este resultado com aquele obtido no osciloscópio, para diferentes medidas (rms, médio, etc.)
+   
+   /****** o código a seguir implementa um filtro de média móvel, para tentar medir igual ao osciloscópio**/
+   
+      read_f =0; // variável float
+    for (i = 1; i <= 6; i++)
+       {
+          HAL_ADC_Start(&hadc1);
+          HAL_ADC_PollForConversion(&hadc1,100);
+          read = HAL_ADC_GetValue(&hadc1);
+          read_f = (float)(read*3.3)/4095 +read_f;
+          vetv[i]=read_f;  // vetor tem que ser float também!
+       }
+    read_f = read_f/6;
+    HAL_Delay(1000);
+	
+
+////////////////////////
+// comunicação serial //
+////////////////////////
+
+// funções disponíveis em Class\CDC -> usbd_cdc.c
+
+/**
+  * @brief  USBD_CDC_TransmitPacket
+  *         Transmit packet on IN endpoint
+  * @param  pdev: device instance
+  * @retval status
+  */
+uint8_t  USBD_CDC_TransmitPacket(USBD_HandleTypeDef *pdev)
+sprintf(buffer,"tensão no ADC %d mV",(read[0]*3300/4095 );
+
+/**
+  * @brief  USBD_CDC_ReceivePacket
+  *         prepare OUT Endpoint for reception
+  * @param  pdev: device instance
+  * @retval status
+  */
+uint8_t  USBD_CDC_ReceivePacket(USBD_HandleTypeDef *pdev)
+
+memset(gUSBRxBuffer,0,255);
+memcpy(gUSBRxBuffer,Buf,*Len);
+
+
+
+////////////////////////
+// codigos auxiliares //
+////////////////////////
+
+    i++;
+    if(i==100000)
+    i=0;
