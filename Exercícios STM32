@@ -1,0 +1,102 @@
+/////////////////////////////////////////////////////
+///////                                       ///////
+///////          GPIO                         ///////
+/////////////////////////////////////////////////////
+
+/*alterar leds ao pressionar um botão*/
+
+  #include "main.h"
+
+// se não usar o lcd, não precisa dessas bibliotecas..
+  #include "stdio.h"
+  #include "lcd_txt.h"
+
+  int a=0,b=0,c=0;
+	// lcd_puts(0,0,(int8_t*)"Roteiro 1");
+	//lcd_clear();
+	char str[10];
+
+	while (1)
+	{
+
+		/* Teste para ligar todos os leds */
+
+		/*
+		HAL_GPIO_WritePin(GPIOA,GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5,1);
+		HAL_Delay(1000);
+		HAL_GPIO_WritePin(GPIOA,GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5,0);
+		HAL_Delay(1000);
+		 */
+
+		/* aqui utiliza a função deslocamento para ligar os leds */
+		
+		/*
+		for(a=0;a<=4;a++)
+		{
+			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_1<<a,1);
+			HAL_Delay(1000);
+			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_1<<a,0);
+			HAL_Delay(1000);
+
+		}
+		 */
+		
+		/* o código a seguir detecta uma borda de subida em um botão, considerar que ele tá ligado no 3v3 por ex */
+		
+		if(!HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_8)) 		 // leitura de um pino do GPIO configurado como entrada
+			b=1;										 // se o pino colocar nivel logico zero, faz b=1 para detectar isso
+		if(b==1 && HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_8))   // se já ocorreu nivel lógico zero, e agora for nivel logico 1, significa que o usuário pressionou o botão e soltou
+			c=1;
+
+		if(c==1) // se ele pressionou o botão, entra no switch case
+		{
+			a++;
+			c=0; // tem que zerar as flags, para detectar uma nova borda de subida
+			b=0;
+
+			switch(a)
+			{
+
+			case 1:
+			{
+				HAL_GPIO_WritePin(GPIOA,GPIO_PIN_1<<4,0);
+				HAL_GPIO_WritePin(GPIOA,GPIO_PIN_1<<0,1);
+				break;
+			}
+			case 2:
+			{
+				HAL_GPIO_WritePin(GPIOA,GPIO_PIN_1<<0,0);
+				HAL_GPIO_WritePin(GPIOA,GPIO_PIN_1<<1,1);
+				break;
+			}
+			case 3:
+			{
+				HAL_GPIO_WritePin(GPIOA,GPIO_PIN_1<<1,0);
+				HAL_GPIO_WritePin(GPIOA,GPIO_PIN_1<<2,1);
+
+				break;
+			}
+			case 4:
+			{
+				HAL_GPIO_WritePin(GPIOA,GPIO_PIN_1<<2,0);
+				HAL_GPIO_WritePin(GPIOA,GPIO_PIN_1<<3,1);
+
+				break;
+			}
+			case 5:
+			{
+				HAL_GPIO_WritePin(GPIOA,GPIO_PIN_1<<3,0);
+				HAL_GPIO_WritePin(GPIOA,GPIO_PIN_1<<4,1);
+				a=0;
+				break;
+			}
+
+			}
+		}
+		
+		/* se não for usar lcd, comentar..*/
+		sprintf(str, "%d", a);
+		lcd_puts(0,0,(int8_t*)str);
+
+		/* USER CODE BEGIN 3 */
+	}
