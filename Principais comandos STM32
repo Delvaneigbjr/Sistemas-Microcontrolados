@@ -236,6 +236,16 @@ memset(gUSBRxBuffer,0,255);
 memcpy(gUSBRxBuffer,Buf,*Len);
 
 
+////////////////////////
+// Bib LCD 16x2       //
+////////////////////////
+
+#include "lcd_txt.h" 
+
+ lcd_init();                        // inicializa o display
+ lcd_puts(0,0,(int8_t*)"lcd test"); // escreve no display
+ HAL_Delay(5000);
+ lcd_clear();                       // limpa o display
 
 ////////////////////////
 // codigos auxiliares //
