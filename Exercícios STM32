@@ -6,7 +6,7 @@
 /*alterar leds ao pressionar um botão*/
 
   #include "main.h"
-
+  lcd_init();
 // se não usar o lcd, não precisa dessas bibliotecas..
   #include "stdio.h"
   #include "lcd_txt.h"
