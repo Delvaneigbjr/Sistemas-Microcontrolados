@@ -47,6 +47,47 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
     i=0;
 }
 
+TIM1->ARR = PERIOD; /* Set the Autoreload value */
+TIM1->CCR1 = PULSE; /* Set the Pulse value */
+TIM1->PSC = Prescaler; /* Set the Prescaler value */
+htim3.Init.Period = tim_per; // atualiza o periodo do timer, deve ser igual a TIM1->ARR = tim_per
+
+/*Alterar o período do contador em tempo real, lendo as variáveis na watch window*/
+ uint32_t tim_per, tim_psc; // variáveis globais
+
+// no int main, colocar a atualização do prescaller e do ARR, cuidar o numero TIMX para ser igual ao que foi configurado no cubemx
+int main(void)
+{
+    TIM3->ARR = tim_per; // Set the Autoreload value
+    TIM3->PSC = tim_psc; // Set the Prescaler value 
+
+}
+
+// na interrupção do contador, colocar um led para piscar, e medir com osciloscópio o período da forma de onda
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
+{
+  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_1); // medir este pino no osciloscópio..
+...
+}
+
+// alterar os valores de tim_psc e tim_per durante o pause do debugger, pela watch window, testar valores da equação!!!
+
+/* escolher entre dois períodos de contagem utilizando um botão*/
+
+if(!HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_0)) // leitura de um pino do GPIO configurado como entrada
+     // tim_per=tim_per+100;
+    {
+      tim_per = 65535; // Set the Autoreload value
+      psc_tim = 1550; // Set the Prescaler value 
+    }
+     
+    else
+    {
+      tim_per = 65535; // Set the Autoreload value
+      psc_tim = 45550; // Set the Prescaler value       
+      
+    }
+
 /* divisor de frequência, é necessário ajustar o incremento das variáveis i j k para obter a divisão adequada */
 
     j++;
