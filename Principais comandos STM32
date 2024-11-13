@@ -147,6 +147,67 @@ htim4.Instance->CCR1 = htim4.Instance->(ARR*i)/100;
 	
 	// colocar no osciloscópio e medir o duty cycle, observar que ele muda 1% a cada 1 segundo, igual ao for que está dentro do mcu!!!
 
+/*** o código a seguir altera a razão cíclica regressivamente, j=1000 significa que ela altera a cada 1 segundo ****/ 
+for(i=0;i>0;i--)
+    {
+      htim4.Instance->CCR2 = (htim4.Instance->ARR*i)/100;
+      HAL_Delay(j);
+    }
+
+/*variando a razão cíclica em um switchcase*/
+/* rotina de interrupção do contador */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
+{
+	HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13); // este led piscando sinaliza que o timer está funcionando!
+    
+    
+	/* teste para saber se entrou aqui.. */
+	duty++;
+    
+	// sinaliza qual case do switch ele está!
+
+	HAL_GPIO_WritePin(GPIOA,GPIO_PIN_1>>(duty-1),0);
+	HAL_GPIO_WritePin(GPIOA,GPIO_PIN_1>>(duty),1);
+
+	if(duty=>4)
+    	duty=0;
+    
+}
+
+switch(duty)
+  	{
+	case 0:
+	{
+    		htim4.Instance->CCR2 = (htim4.Instance->ARR*25)/100;	 
+    		break;
+	}
+	case 1:
+	{
+    		htim4.Instance->CCR2 = (htim4.Instance->ARR*50)/100;
+    		break;
+	}
+	case 2:
+	{    
+    		htim4.Instance->CCR2 = (htim4.Instance->ARR*75)/100;
+    		break;
+	}
+	case 3:
+	{    
+    		htim4.Instance->CCR2 = (htim4.Instance->ARR*100)/100;
+    		break;
+	}
+	case 4:
+	{	 
+    		htim4.Instance->CCR2 = (htim4.Instance->ARR*0)/100;
+    		break;
+	}
+    
+  	}
+    
+
+
+
+
 ////////////////////////
 //     módulo ADC     //
 ////////////////////////
