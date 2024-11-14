@@ -203,8 +203,50 @@ switch(duty)
 	}
     
   	}
-    
 
+
+/*O código a seguir altera a razão cíclica de dois canais do PWM timer 9, eles estão nos pinos A2 e A3*/
+
+// variáveis globais
+int j=100, i=0, ARR=0,a=0;
+
+// disparo do temporizador 9 para os dois canais
+HAL_TIM_PWM_Start(&htim9, TIM_CHANNEL_1);
+HAL_TIM_PWM_Start(&htim9, TIM_CHANNEL_2);
+ 
+// colocar dentro do while(1)
+
+for(i=0;i<100;i++)
+    {
+// o j precisa ser igual a zero para ver os leds evoluirem mais rápido, deixar lento se quiser ver no osciloscópio, ajustar durante a depuração
+      if(a==1)
+      {
+        htim9.Instance->CCR2 = (htim9.Instance->ARR*i)/100;
+        HAL_Delay(j);
+      }
+      else
+      {
+        htim9.Instance->CCR1 = (htim9.Instance->ARR*i)/100;
+        HAL_Delay(j);
+      }     
+     
+    }
+    
+    for(i=100;i>0;i--)
+    {
+      if(a==1)
+      {
+        htim9.Instance->CCR2 = (htim9.Instance->ARR*i)/100;
+        HAL_Delay(j);
+      }
+      else
+      {
+        htim9.Instance->CCR1 = (htim9.Instance->ARR*i)/100;
+        HAL_Delay(j);
+      }
+    }
+    a=!a;
+    
 
 
 
