@@ -351,6 +351,34 @@ read = HAL_ADC_GetValue(&hadc1);
        }
     read_f = read_f/6;
     HAL_Delay(1000);
+
+/*o código a seguir acende os leds em sequência, para mostrar a faixa de tensão em que se encontra a leitura do conversor A/D, os leds variam a cada 3,3/5 = 0,66 V*/
+
+if(0<read_f && read_f<0.66)
+    {
+       HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, 1);
+       HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5, 0);
+    }
+    if(0.66<read_f && read_f<1.32)
+    { 
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1|GPIO_PIN_2,1);
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5, 0);
+    
+    }
+    if(1.32<read_f && read_f<1.98)
+    { 
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3, 1);
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4|GPIO_PIN_5, 0);
+    }
+    if(1.98<read_f && read_f<2.66)
+    { 
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_4,1);
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, 0);
+    }
+    if(2.66<read_f && read_f<3.3)
+    { 
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5, 1);
+    }
 	
 
 ////////////////////////
