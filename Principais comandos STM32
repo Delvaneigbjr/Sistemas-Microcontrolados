@@ -419,6 +419,33 @@ memcpy(gUSBRxBuffer,Buf,*Len);
  HAL_Delay(5000);
  lcd_clear();                       // limpa o display
 
+// bibliotecas para usar o lcd no stm32
+
+#include "main.h"
+#include "i2c_lcd.h" // essa aqui inicializa e permite o uso do lcd..
+#include "stdint.h"
+#include "printf.h" // essa aqui tem um sprintf que não dá erro...
+
+/* inicializa o lcd, tem que colocar o endereço e, no caso do lcd utilizado, precisou deslocar em >>1 ele..*/
+lcd1.hi2c = &hi2c1;
+lcd1.address = 0x27<<1;
+lcd_init(&lcd1);
+
+
+/* o código a seguir mostra na tela uma variável que é incrementada por um laço for */
+
+for(i=0;i<100;i++)
+{
+   lcd_gotoxy(&lcd1, 0, 0);
+   snprintf(str_lcd,32, "Potencia Ativa : %i", i);
+   lcd_puts(&lcd1, str_lcd);
+   lcd_gotoxy(&lcd1, 1, 0);
+   snprintf(str_lcd,32, "Potencia Reativa : %i", i);
+   lcd_puts(&lcd1, str_lcd);
+   HAL_Delay(j);
+ }
+
+
 ////////////////////////
 // codigos auxiliares //
 ////////////////////////
