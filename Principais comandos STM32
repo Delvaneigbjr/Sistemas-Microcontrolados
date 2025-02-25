@@ -408,6 +408,12 @@ memset(gUSBRxBuffer,0,255);
 memcpy(gUSBRxBuffer,Buf,*Len);
 
 
+// transmitir mensagem
+#include <string.h>
+uint8_t buffer[255]; //para envio de dados para o terminal
+sprintf(buffer,"Menu de escolha para configuracao do sistema\r\n1. Biblioteca\r\n2. Manual\r\n");
+CDC_Transmit_FS(buffer, strlen(buffer));
+
 ////////////////////////
 // Bib LCD 16x2       //
 ////////////////////////
