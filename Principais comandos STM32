@@ -451,6 +451,41 @@ for(i=0;i<100;i++)
    HAL_Delay(j);
  }
 
+/* o código a seguir mostra na tela uma visualização de um medidor de temperatura e humidade, similar ao AC2000 PLUS */
+
+// definir fora do int main
+void lcd_temp_tela_inicial(void); // antes do int main
+
+
+void lcd_temp_tela_inicial(void) // depois do int main, ou coloca esse direto em cima do int main, vai funcionar também
+{
+	lcd_clear(&lcd1);
+
+		lcd_gotoxy(&lcd1, 0, 0);
+		lcd_puts(&lcd1, "00.0");
+
+		lcd_gotoxy(&lcd1, 7, 0);
+		lcd_puts(&lcd1, "Level");
+
+		lcd_gotoxy(&lcd1, 15, 0);
+		lcd_puts(&lcd1, "00:00");
+
+		lcd_gotoxy(&lcd1, 8, 1);
+		lcd_puts(&lcd1, "00");
+
+		lcd_gotoxy(&lcd1, 0, 1);
+		lcd_puts(&lcd1, "00.0%");
+
+		lcd_gotoxy(&lcd1, 14, 1);
+		lcd_puts(&lcd1, "Day:");
+
+		lcd_gotoxy(&lcd1, 18, 1);
+		lcd_puts(&lcd1, "00");
+
+}
+
+// pode chamar durante a inicialização ou no meio do código
+lcd_temp_tela_inicial(); 
 
 ////////////////////////
 // codigos auxiliares //
