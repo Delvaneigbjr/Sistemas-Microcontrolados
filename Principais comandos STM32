@@ -432,6 +432,8 @@ CDC_Transmit_FS(buffer, strlen(buffer));
 #include "stdint.h"
 #include "printf.h" // essa aqui tem um sprintf que não dá erro...
 
+I2C_LCD_HandleTypeDef lcd1;
+
 /* inicializa o lcd, tem que colocar o endereço e, no caso do lcd utilizado, precisou deslocar em >>1 ele..*/
 lcd1.hi2c = &hi2c1;
 lcd1.address = 0x27<<1;
