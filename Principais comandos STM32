@@ -456,7 +456,6 @@ for(i=0;i<100;i++)
 // definir fora do int main
 void lcd_temp_tela_inicial(void); // antes do int main
 
-
 void lcd_temp_tela_inicial(void) // depois do int main, ou coloca esse direto em cima do int main, vai funcionar também
 {
 	lcd_clear(&lcd1);
@@ -486,6 +485,54 @@ void lcd_temp_tela_inicial(void) // depois do int main, ou coloca esse direto em
 
 // pode chamar durante a inicialização ou no meio do código
 lcd_temp_tela_inicial(); 
+
+// pode associar a uma variável e uma lógica, para invocar ele pela live watch do cube ide
+
+if(z1==0)
+   lcd_temp_tela_inicial();
+
+// teste genérico para variar os dígitos da tela de temperatura e humidade
+
+int x11=0,y11=0,z1=1,i=0,j=800;
+char str_lcd[32]="teste";
+
+for(i=0;i<100;i++)
+		{
+			lcd_gotoxy(&lcd1,0 ,0);
+			snprintf(str_lcd,32, "23.%i", i);
+			lcd_puts(&lcd1, str_lcd);
+
+
+
+			if (i>50)
+			{
+				lcd_gotoxy(&lcd1, 0, 1);
+				snprintf(str_lcd,32, "%i:%i", i);
+				lcd_puts(&lcd1, str_lcd);
+
+
+			}
+
+			if (i<11)
+			{
+
+				// nivel
+				lcd_gotoxy(&lcd1, 8, 1);
+				snprintf(str_lcd,32, "%i", i);
+				lcd_puts(&lcd1, str_lcd);
+			}
+
+			if (i<5)
+			{
+
+				// dia
+				lcd_gotoxy(&lcd1, 18, 1);
+				snprintf(str_lcd,32, "%i", i);
+				lcd_puts(&lcd1, str_lcd);
+			}
+			    HAL_Delay(j);
+
+		}
 
 ////////////////////////
 // codigos auxiliares //
