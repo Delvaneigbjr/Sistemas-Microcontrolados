@@ -379,7 +379,16 @@ if(0<read_f && read_f<0.66)
     { 
       HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5, 1);
     }
-	
+
+/* o código a seguir converter dois canais A0 e A1 utilizando DMA*/
+
+uint32_t AD_RES_BUFFER[2];
+float AD_RES_f[2];
+
+// Start ADC Conversion in DMA Mode 
+HAL_ADC_Start_DMA(&hadc1, AD_RES_BUFFER, 2);
+AD_RES_f[0] = (float)(AD_RES_BUFFER[0]*100)/4095;
+AD_RES_f[1] = (float)(AD_RES_BUFFER[1]*100)/4095;
 
 ////////////////////////
 // comunicação serial //
@@ -535,6 +544,18 @@ for(i=0;i<100;i++)
 			    HAL_Delay(j);
 
 		}
+
+// transformando números float e colocando eles na tela, com duas casas após a vírgula
+// OBS: se a tela ficar cheia de caracteres, reiniciar o microcontrolador e o display, desplugando o gravador da USB.
+// dá pra ver na watchwindow as variáveis, inclusive a str_lcd, nela aparece os dígitos que serão transmitidos para o display
+
+lcd_gotoxy(&lcd1,0 ,0);
+snprintf(str_lcd,32, "%.1f", AD_RES_f[0]);
+lcd_puts(&lcd1, str_lcd);
+
+lcd_gotoxy(&lcd1, 0, 1);
+snprintf(str_lcd,32, "%.1f", AD_RES_f[1]);
+lcd_puts(&lcd1, str_lcd);
 
 ////////////////////////
 // codigos auxiliares //
