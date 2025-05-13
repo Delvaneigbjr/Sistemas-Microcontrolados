@@ -391,6 +391,16 @@ HAL_ADC_Start_DMA(&hadc1, AD_RES_BUFFER, 2);
 AD_RES_f[0] = (float)(AD_RES_BUFFER[0]*100)/4095;
 AD_RES_f[1] = (float)(AD_RES_BUFFER[1]*100)/4095;
 
+// conversão DMA com laço for
+
+HAL_ADC_Start_DMA(&hadc1, AD_RES_BUFFER, 2);
+HAL_Delay(250);
+
+for(i=0;i<2;i++)
+{
+    resultado[i] = (float)(AD_RES_BUFFER[i]*100)/4095;
+}
+
 ////////////////////////
 // comunicação serial //
 ////////////////////////
@@ -561,6 +571,15 @@ lcd_puts(&lcd1, str_lcd);
 ////////////////////////
 // codigos auxiliares //
 ////////////////////////
+
+// cálculo potências
+
+#include "math.h"
+
+float resultado[]={0,0},S0_= 0 ,Q0_= 0,theta_= 0 ;
+
+S0_ =resultado[0]*resultado[1]*cosf(theta_);
+Q0_ =resultado[0]*resultado[1]*sinf(theta_);
 
     i++;
     if(i==100000)
