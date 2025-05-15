@@ -568,6 +568,118 @@ lcd_gotoxy(&lcd1, 0, 1);
 snprintf(str_lcd,32, "%.1f", AD_RES_f[1]);
 lcd_puts(&lcd1, str_lcd);
 
+
+// menu com 7 opções
+
+// definir as funções como ponteiros, caso use o snprintf dentro delas
+static void LCD_MENU_INICIAL(char *x, char *y, char *z, char *w);
+
+// variáveis genéricas para escrita do lcd
+char str_lcd1[80],str_lcd2[80],str_lcd3[80],str_lcd4[80];
+
+// incrementar a variável dentro de uma interrupção, e limpar o display nela
+switch(k)
+		{
+		case 0:
+		{
+	// definir essas variáveis strings genéricas, e deixar elas pronta para receberem
+// a informação que vai para o lcd
+			snprintf(str_lcd1,80," %0.2f", Vo);
+			snprintf(str_lcd2,80," %0.2f", Io);
+			snprintf(str_lcd3,80," %0.2f", S0_);
+			snprintf(str_lcd4,80," %0.2f", Q0_);
+			LCD_MENU_INICIAL(str_lcd1,str_lcd2,str_lcd3,str_lcd4);
+
+			break;
+		}
+		case 1:
+		{
+			snprintf(str_lcd1,80," %0.2f", custo_kWh_1d);
+			snprintf(str_lcd2,80," %0.2f", 0.57);
+			LCD_MENU_KWDIARIO(str_lcd1,str_lcd2);
+
+			break;
+		}
+		case 2:
+		{
+			snprintf(str_lcd1,80," %0.2f", custo_kWh_1d);
+			snprintf(str_lcd2,80," %0.2f", 0.57);
+			LCD_MENU_KWSEMANAL(str_lcd1,str_lcd2);
+
+			break;
+		}
+		case 3:
+		{
+			snprintf(str_lcd1,80," %0.2f", custo_kWh_Mes);
+			snprintf(str_lcd2,80," %0.2f", 0.57);
+			LCD_MENU_KWMENSAL(str_lcd1,str_lcd2);
+
+			break;
+		}
+		case 4:
+		{
+			snprintf(str_lcd1,80," %0.2f", custo_kWh_Mes);
+			snprintf(str_lcd2,80," %0.2f", 0.57);
+			LCD_MENU_KWDEBITO(str_lcd1,str_lcd2);
+
+			break;
+		}
+		case 5:
+		{
+			snprintf(str_lcd1,80," %0.2f", 0.57);
+			//snprintf(str_lcd2,255," %0.2f", S0_);
+			LCD_MENU_TARIFA(str_lcd1);
+
+			break;
+		}
+		case 6:
+		{
+			snprintf(str_lcd1,80," %0.2f", S0_);
+			snprintf(str_lcd2,80," %0.2f", S0_);
+			LCD_MENU_CREDTEM(str_lcd1,str_lcd2);
+
+			break;
+		}
+		case 7:
+		{
+			snprintf(str_lcd1,80," OK", S0_);
+			snprintf(str_lcd2,80," %d", falha_);
+			snprintf(str_lcd3,80," 15/06/2025", str_lcd1);
+			LCD_MENU_MISC(str_lcd1,str_lcd2,str_lcd3);
+
+			break;
+		}
+		}
+
+// adotar esse padrão para as outras funções
+void LCD_MENU_INICIAL(char *x, char *y, char *z, char *w)
+{
+
+
+	lcd_gotoxy(&lcd1, 0, 0);
+	lcd_puts(&lcd1, "Vo:");
+
+	lcd_gotoxy(&lcd1, 2, 0);
+	lcd_puts(&lcd1, x);
+
+	lcd_gotoxy(&lcd1, 9, 0);
+	lcd_puts(&lcd1, "Io:");
+
+	lcd_gotoxy(&lcd1, 12, 0);
+	lcd_puts(&lcd1, y);
+
+	lcd_gotoxy(&lcd1, 0, 1);
+	lcd_puts(&lcd1, "S0:");
+
+	lcd_gotoxy(&lcd1, 2, 1);
+	lcd_puts(&lcd1, z);
+
+	lcd_gotoxy(&lcd1, 0, 2);
+	lcd_puts(&lcd1, "Q0:");
+
+	lcd_gotoxy(&lcd1, 2, 2);
+	lcd_puts(&lcd1, w);
+}
 ////////////////////////
 // codigos auxiliares //
 ////////////////////////
