@@ -248,6 +248,22 @@ for(i=0;i<100;i++)
     }
     a=!a;
     
+// rotina de interrupção - call back do sinal pwm
+
+/**
+  * @brief  PWM Pulse finished callback in non-blocking mode
+  * @param  htim TIM handle
+  * @retval None
+  */
+__weak void HAL_TIM_PWM_PulseFinishedCallback(TIM_HandleTypeDef *htim)
+{
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(htim);
+
+  /* NOTE : This function should not be modified, when the callback is needed,
+            the HAL_TIM_PWM_PulseFinishedCallback could be implemented in the user file
+   */
+}
 
 
 
@@ -680,6 +696,45 @@ void LCD_MENU_INICIAL(char *x, char *y, char *z, char *w)
 	lcd_gotoxy(&lcd1, 2, 2);
 	lcd_puts(&lcd1, w);
 }
+
+////////////////////////
+//       Proteus      //
+////////////////////////
+
+HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
+uint32_t AD_RES_BUFFER[2],duty=0;
+float AD_RES_f[2];
+
+
+/* o código a seguir testa o adc e o pwm, ao ajustar o adc altera a razão cíclica, acende um led para provar que o adc funciona, e pisca outro para mostrar que o código está sendo executado */
+
+		/* USER CODE END WHILE */
+		HAL_GPIO_WritePin(GPIOA,GPIO_PIN_1,0);
+		HAL_Delay(200);
+		HAL_GPIO_WritePin(GPIOA,GPIO_PIN_1,1);
+		HAL_Delay(200);
+
+
+
+		// Start ADC Conversion in DMA Mode
+		HAL_ADC_Start_DMA(&hadc1, AD_RES_BUFFER, 2);
+		AD_RES_f[0] = (float)(AD_RES_BUFFER[0]*3.3)/4095;
+		AD_RES_f[1] = (float)(AD_RES_BUFFER[1]*100)/4095;
+
+		/*o código a seguir acende os leds em sequência, para mostrar a faixa de tensão em que se encontra a leitura do conversor A/D, os leds variam a cada 3,3/5 = 0,66 V*/
+
+		if(0<AD_RES_f[0] && AD_RES_f[0]<2)
+		{
+			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_2,1);
+		}
+		else
+		{
+			HAL_GPIO_WritePin(GPIOA,GPIO_PIN_2,0);
+		}
+
+		duty = (float)(AD_RES_BUFFER[0]*100)/4095;
+		htim2.Instance->CCR1 = (htim2.Instance->ARR*duty)/100;
+		/* USER CODE BEGIN 3 */
 ////////////////////////
 // codigos auxiliares //
 ////////////////////////
