@@ -265,7 +265,11 @@ __weak void HAL_TIM_PWM_PulseFinishedCallback(TIM_HandleTypeDef *htim)
    */
 }
 
+// função para interromper/parar o sinal PWM
+HAL_TIM_PWM_Stop(&htim2, TIM_CHANNEL_3);
 
+// outra forma de atualizar o dutycycle
+__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, PWM_MAX); // 100% duty em PA6
 
 ////////////////////////
 //     módulo ADC     //
@@ -369,6 +373,21 @@ read = HAL_ADC_GetValue(&hadc1);
     read_f = read_f/6;
     HAL_Delay(1000);
 
+/*leitura de múltiplos canais utilizando o pooling*/
+
+ // Leitura do ADC em PB0
+ADC1_Set_Channel(ADC_CHANNEL_8); // 
+	  HAL_ADC_Start(&hadc1);
+	  HAL_ADC_PollForConversion(&hadc1, 100);
+	  adc_value = HAL_ADC_GetValue(&hadc1);  // valor entre 0 e 4095
+	  HAL_ADC_Stop(&hadc1);
+  // Leitura do ADC em PA0 
+	  ADC1_Set_Channel(ADC_CHANNEL_0);
+	  HAL_ADC_Start(&hadc1);
+	  HAL_ADC_PollForConversion(&hadc1, 100);
+	  adc_value1 = HAL_ADC_GetValue(&hadc1);
+	  HAL_ADC_Stop(&hadc1);
+
 /*o código a seguir acende os leds em sequência, para mostrar a faixa de tensão em que se encontra a leitura do conversor A/D, os leds variam a cada 3,3/5 = 0,66 V*/
 
 if(0<read_f && read_f<0.66)
@@ -416,6 +435,29 @@ for(i=0;i<2;i++)
 {
     resultado[i] = (float)(AD_RES_BUFFER[i]*100)/4095;
 }
+
+/*o código a seguir é uma função para ler um canal genérico do ADC*/
+
+//FUNÇÃO PARA LER UM CANAL DO ADC
+uint32_t ler_canal_adc(uint32_t canal) {
+	ADC_ChannelConfTypeDef sConfig = {0};
+
+    sConfig.Channel = canal;
+    sConfig.Rank = 1;
+    sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+
+    if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK) {
+    	Error_Handler();
+    }
+
+    HAL_ADC_Start(&hadc1);
+    HAL_ADC_PollForConversion(&hadc1, 100);
+    uint32_t valor_adc = HAL_ADC_GetValue(&hadc1);
+    HAL_ADC_Stop(&hadc1);
+
+    return valor_adc;
+}
+
 
 ////////////////////////
 // comunicação serial //
