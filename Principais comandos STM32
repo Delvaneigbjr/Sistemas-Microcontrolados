@@ -518,7 +518,7 @@ CDC_Transmit_FS(buffer, strlen(buffer));
 
 #include "main.h"
 #include "i2c_lcd.h" // essa aqui inicializa e permite o uso do lcd..
-#include "stdint.h"
+#include "stdio.h"
 #include "printf.h" // essa aqui tem um sprintf que não dá erro...
 
 I2C_LCD_HandleTypeDef lcd1;
