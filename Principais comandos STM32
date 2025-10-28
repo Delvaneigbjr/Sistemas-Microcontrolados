@@ -750,6 +750,22 @@ void LCD_MENU_INICIAL(char *x, char *y, char *z, char *w)
 	lcd_puts(&lcd1, w);
 }
 
+// percorrer todas as posições de um display 20x4
+
+int x11=0,y11=0,i=0,j=0;
+char str_lcd[32]="teste";
+
+		for(i=0;i<4;i++)
+		{
+			for(j=0;j<20;j++)
+			{
+				lcd_gotoxy(&lcd1,j ,i);
+				snprintf(str_lcd,32, "%i", i);
+				lcd_puts(&lcd1, str_lcd);
+				HAL_Delay(150);
+			}
+		}
+
 ////////////////////////
 //       Proteus      //
 ////////////////////////
