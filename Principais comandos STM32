@@ -282,6 +282,46 @@ HAL_TIM_PWM_Stop(&htim2, TIM_CHANNEL_3);
 // outra forma de atualizar o dutycycle
 __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, PWM_MAX); // 100% duty em PA6
 
+//////// Leitura do potenciometro para atualizaçao da razão cíclica
+
+volatile uint32_t adc_raw_value = 0;   // Leitura direta do ADC (0 a 4095)
+volatile uint32_t pwm_duty = 0;        // Valor atualizado para o CCR1
+
+    // 1. Inicia o Timer 3 gerando PWM no Canal 1
+    HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1);
+
+    // 2. Habilita a Interrupção por Estouro de Período (Update Event) do Timer 3
+    HAL_TIM_Base_Start_IT(&htim4);
+
+/* USER CODE BEGIN 4 */
+
+/* rotina de interrupção do contador */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
+{
+	if (htim->Instance == TIM4)
+	  {
+	    // 1. Inicia a conversão do ADC (Canal A0) de forma polling simples/rápida
+	    HAL_ADC_Start(&hadc1);
+
+	    // Aguarda o término da conversão (Timeout curto de 1ms)
+	    if (HAL_ADC_PollForConversion(&hadc1, 1) == HAL_OK)
+	    {
+	      adc_raw_value = HAL_ADC_GetValue(&hadc1); // Lê o valor de 12 bits (0 a 4095)
+	    }
+	    HAL_ADC_Stop(&hadc1);
+
+	    // 2. Mapeia a leitura do ADC (0-4095) para a resolução do PWM (ARR do Timer 3)
+	    // Exemplo: Se ARR = 999 (PWM de 0 a 100%), escalona o valor:
+	    pwm_duty = (adc_raw_value * __HAL_TIM_GET_AUTORELOAD(htim)) / 4095;
+
+	    // 3. Atualiza a Razão Cíclica (Duty Cycle) escrevendo direto no registrador CCR1
+	    __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, pwm_duty);
+	  }
+
+}
+/* USER CODE END 4 */
+
+
 ////////////////////////
 //     módulo ADC     //
 ////////////////////////
